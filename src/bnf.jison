@@ -79,7 +79,7 @@ production
 		    			var numTokens=handle_action[0];
 		    			handle_action.shift();
 		    			//now to inject the code
-		    			handle_action[1]='this.AST.reduce('+$1+',\''+numTokens+'\');\n'+handle_action[1];
+		    			handle_action[1]='AST.reduce(\''+$1+'\','+numTokens+');\n'+handle_action[1];
 		    });
         	$$ = [$1, $3];
         %};
