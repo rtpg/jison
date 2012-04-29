@@ -65,13 +65,21 @@ production_list
         {$$ = $1;
           if($2[0] in $$) $$[$2[0]] = $$[$2[0]].concat($2[1]);
           else  $$[$2[0]] = $2[1];}
-    | production
+    | production 
         {$$ = {}; $$[$1[0]] = $1[1];}
     ;
 
 production
     : id ':' handle_list ';'
-        {$$ = [$1, $3];}
+        %{/*a little tricky. We have access to the id, I now need to crawl all the way back down into the handle actions to inject the id name*/
+		    $3.forEach(function(handle_action){
+		    			var numTokens=handle_action[0];
+		    			handle_action.shift();//we're now back to the original format
+		    			//now to inject the code
+		    			handle_action[1]='AST.reduce('+$1+','+numTokens+');\n'+handle_action[1];//now we're good
+		    };
+        	$$ = [$1, $3];
+        %}
     ;
 
 handle_list
@@ -83,8 +91,8 @@ handle_list
 
 handle_action
     : handle prec action
-        {$$ = [($1.length ? $1.join(' ') : '')];
-            if($3) $$.push($3);
+        {$$ = [$1.length,($1.length ? $1.join(' ') : '')];/*placed the number of tokens in the handle*/
+            $$.push($3?$3:'');/*code injection here, for reduce*/
             if($2) $$.push($2);
             if ($$.length === 1) $$ = $$[0];
         }
@@ -167,4 +175,3 @@ action_body
     ;
 
 %%
-
