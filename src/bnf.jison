@@ -1,6 +1,9 @@
 %{
 var ebnf = false;
 %}
+%{
+	console.log('hello');
+%}
 
 %%
 
@@ -71,16 +74,16 @@ production_list
 
 production
     : id ':' handle_list ';'
-        %{/*a little tricky. We have access to the id, I now need to crawl all the way back down into the handle actions to inject the id name*/
+        %{
 		    $3.forEach(function(handle_action){
 		    			var numTokens=handle_action[0];
-		    			handle_action.shift();//we're now back to the original format
+		    			handle_action.shift();
 		    			//now to inject the code
-		    			handle_action[1]='AST.reduce('+$1+','+numTokens+');\n'+handle_action[1];//now we're good
-		    };
+		    			handle_action[1]='this.AST.reduce('+$1+',\''+numTokens+'\');\n'+handle_action[1];
+		    });
         	$$ = [$1, $3];
-        %}
-    ;
+        %};
+
 
 handle_list
     : handle_list '|' handle_action
@@ -91,13 +94,12 @@ handle_list
 
 handle_action
     : handle prec action
-        {$$ = [$1.length,($1.length ? $1.join(' ') : '')];/*placed the number of tokens in the handle*/
-            $$.push($3?$3:'');/*code injection here, for reduce*/
+        %{
+        	$$ = [$1.length,($1.length ? $1.join(' ') : '')];
+            $$.push($3?$3:'');
             if($2) $$.push($2);
             if ($$.length === 1) $$ = $$[0];
-        }
-    ;
-
+        %};
 handle
     : handle expression_suffix
         {$$ = $1; $$.push($2)}
@@ -172,6 +174,5 @@ action_body
         {$$ = $1+$2+$3+$4+$5;}
     | action_body '{' action_body '}'
         {$$ = $1+$2+$3+$4;}
-    ;
-
+    ;    
 %%
