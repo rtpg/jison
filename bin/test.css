@@ -1,0 +1,31 @@
+ 
+/*shamlessly copied from http://software.hixie.ch/utilities/js/live-dom-viewer/ */
+.tree li li { list-style: none; }
+.tree li:first-child::before { position: absolute; top: 0; height: 0.6em; left: -0.75em; width: 0.5em; border-style: none none solid solid; content: ''; border-width: 0.1em; }
+.tree li:not(:last-child)::after { position: absolute; top: 0; bottom: -0.6em; left: -0.75em; width: 0.5em; border-style: none none solid solid; content: ''; border-width: 0.1em; }
+.tree { border: inset thin; padding: 0.5em 0.5em 0.5em 1em; color: black; min-height: 5em; font-family: monospace; background: white; }
+ .tree ul { padding: 0 0 0 1em; margin: 0; }
+   .tree li { padding: 0.3em;  list-style: none; position: relative; }
+   .tree .t1 code { color: purple; font-weight: bold; }
+   .tree .t2 { font-style: normal; font-family: monospace; }
+   .tree .t2 .name { color: black; font-weight: bold; }
+   .tree .t2 .value { color: blue; font-weight: normal; }
+   .tree .t3 code, #dom .t4 code, #dom .t5 code { color: gray; }
+   .tree .t7 code, #dom .t8 code { color: green; }
+
+   .tree .t10 code { color: teal; }
+   .tree .misparented, #dom .misparented code { color: red; font-weight: bold; }
+   .tree .unnamed { color: red; font-style: italic; }
+   .tree .hidden, .hidden { visibility: hidden; margin: 0.5em 0; padding: 0; height: 0; min-height: 0; }
+
+   pre{
+         display:inline-block;
+      }
+.semantic{
+	font-style:italic;
+	font-family:cursive;
+}
+.border{
+   background-color: red;
+   
+}
